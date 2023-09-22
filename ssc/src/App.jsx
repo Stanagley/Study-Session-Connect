@@ -1,16 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LoginPage from './views/LoginPage';
+import HomePage from './views/HomePage';
+import NavBar from './components/NavBar';
+import Footer from './components/Footer';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Welcome to Study Session Connect</h1>
-        <p>Find study sessions nearby! Login below.</p>
-        <button className="login-button">Login</button>
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <div>
+                <NavBar />
+                <Routes>
+                    <Route path="/login">
+                        <LoginPage />
+                    </Route>
+                    <Route path="/">
+                        <HomePage />
+                    </Route>
+                </Routes>
+                <Footer />
+            </div>
+        </Router>
+    );
 }
 
 export default App;
