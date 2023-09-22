@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function NavBar() {
     const styles = {
@@ -11,8 +12,9 @@ function NavBar() {
     return (
         <nav style={styles.nav}>
             <ul style={styles.ul}>
-                <li style={styles.li}><a href="/" style={styles.a}>Home</a></li>
-                <li style={styles.li}><a href="/login" style={styles.a}>Login</a></li>
+                <li style={styles.li}><Link to="/" style={styles.a}>Home</Link></li>
+                <li style={styles.li}><Link to="/search" style={styles.a}>Search</Link></li>
+                <li style={styles.li}><Link to="/login" style={styles.a}>Login</Link></li>
             </ul>
         </nav>
     );

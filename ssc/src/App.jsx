@@ -5,8 +5,10 @@ import HomePage from './views/HomePage';
 import AboutPage from './views/AboutPage';
 import ContactPage from './views/ContactPage';
 import CreateSessionPage from './views/CreateSessionPage';
+import SearchPage from './views/SearchPage';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
+
 
 function App() {
     return (
@@ -16,6 +18,7 @@ function App() {
                 <Routes>
                     <Route path="login" element={<LoginPage />} />
                     <Route path="about" element={<AboutPage />} />
+                    <Route path="search" element={<SearchPage />} />
                     <Route path="" element={<HomePage />} />
                     <Route path="contact" element={<ContactPage />} />
                     <Route path="create-session" element={<CreateSessionPage />} />
