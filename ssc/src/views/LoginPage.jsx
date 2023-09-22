@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 function LoginPage() {
     const styles = {
         container: { padding: '20px', maxWidth: '400px', margin: 'auto' },
@@ -5,20 +7,32 @@ function LoginPage() {
         button: { padding: '10px 20px', cursor: 'pointer' }
     };
 
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = (e) => {
+        console.log(username);
+        console.log(password);
+    }
+
     return (
         <div style={styles.container}>
             <h2>Login</h2>
             <form>
                 <div>
                     <label>Email:</label>
-                    <input type="email" placeholder="Enter your email" style={styles.input} />
+                    <input type="email" placeholder="Enter your email" style={styles.input} onChange={(e) => {
+                        setUsername(e.target.value);
+                    }}/>
                 </div>
                 <div>
                     <label>Password:</label>
-                    <input type="password" placeholder="Enter your password" style={styles.input} />
+                    <input type="password" placeholder="Enter your password" style={styles.input} onChange={(e) => {
+                        setPassword(e.target.value);
+                    }}/>
                 </div>
                 <div>
-                    <button type="submit" style={styles.button}>Login</button>
+                    <button type="submit" style={styles.button} onClick={handleSubmit}>Login</button>
                 </div>
             </form>
         </div>
