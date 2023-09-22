@@ -8,11 +8,13 @@ function NavBar() {
         a: { color: 'white', textDecoration: 'none' }
     };
 
+    // Will Be a drop down menu later, now just for testing purposes b/c high priority goals exist
     return (
         <nav style={styles.nav}>
             <ul style={styles.ul}>
                 <li style={styles.li}><a href="/" style={styles.a}>Home</a></li>
                 <li style={styles.li}><a href="/login" style={styles.a}>Login</a></li>
+                <li style={styles.li}><a href="/create-session" style={styles.a}>Create Session</a></li>
             </ul>
         </nav>
     );
