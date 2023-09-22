@@ -10,9 +10,20 @@ function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSignUpSubmit = (e) => {
         console.log(username);
         console.log(password);
+        // ADD FUNCTIONALITY DEAL WITH BACKEND
+        // 1. check unique user already in ds (this user already used)
+        // 2. if unqiue, create new user with password
+    }
+
+    const handleLoginSubmit = (e) => {
+        console.log(username);
+        console.log(password);
+        // ADD FUNCTIONALITY DEAL WITH BACKEND
+        // 1. Check if user exists (no such user)
+        // 2. Check if correct password (incorrect password)
     }
 
     return (
@@ -32,7 +43,8 @@ function LoginPage() {
                     }}/>
                 </div>*/}
                 <div>
-                    <button type="submit" style={styles.button} onClick={handleSubmit}>Login</button>
+                    <button type="submit" style={styles.button} onClick={handleLoginSubmit}>Login</button>
+                    <button type="submit" style={styles.button} onClick={handleSignUpSubmit}>Sign Up</button>
                 </div>
             </form>
         </div>

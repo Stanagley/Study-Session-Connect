@@ -16,6 +16,7 @@ function CreateSessionPage() {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log('Form Data Submitted:', formData);
+        // ADD FUNCTIONALITY TO SEND DATA TO BACKEND
     };
 
     const styles = {
