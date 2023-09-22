@@ -2,10 +2,17 @@ import React from 'react';
 
 function Footer() {
     const styles = {
-        footer: { backgroundColor: '#f5f5f5', padding: '20px 0', textAlign: 'center' },
+        footer: {
+            backgroundColor: '#f5f5f5',
+            padding: '20px 0',
+            textAlign: 'center',
+            position: 'absolute',
+            bottom: '0',
+            width: '100%',
+        },
         links: { display: 'flex', justifyContent: 'center', marginBottom: '10px' },
         link: { margin: '0 15px', textDecoration: 'none', color: '#007BFF' },
-        copyright: { fontSize: '0.9em', color: '#666' }
+        copyright: { fontSize: '0.9em', color: '#666' },
     };
 
     return (
