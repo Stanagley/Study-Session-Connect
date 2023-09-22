@@ -25,12 +25,12 @@ function LoginPage() {
                         setUsername(e.target.value);
                     }}/>
                 </div>
-                <div>
+                {/*<div>
                     <label>Password:</label>
                     <input type="password" placeholder="Enter your password" style={styles.input} onChange={(e) => {
                         setPassword(e.target.value);
                     }}/>
-                </div>
+                </div>*/}
                 <div>
                     <button type="submit" style={styles.button} onClick={handleSubmit}>Login</button>
                 </div>
