@@ -13,7 +13,7 @@ function SearchPage() {
     const [searchResults, setSearchResults] = useState([]); // State to store search results
 
     const handleSearch = (query) => {
-
+        //create a searching algorithm from the backend
     };
 
     return (
