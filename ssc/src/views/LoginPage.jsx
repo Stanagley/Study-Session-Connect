@@ -24,6 +24,18 @@ function LoginPage() {
         // ADD FUNCTIONALITY DEAL WITH BACKEND
         // 1. Check if user exists (no such user)
         // 2. Check if correct password (incorrect password)
+        callUserAPI();
+    }
+
+    const callUserAPI = async () => {
+        try {
+            const response = await fetch('http://localhost:9000/users');
+            const users = await response.json();
+            console.log({ users });
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
 
     return (
@@ -36,12 +48,12 @@ function LoginPage() {
                         setUsername(e.target.value);
                     }}/>
                 </div>
-                {/*<div>
+                <div>
                     <label>Password:</label>
                     <input type="password" placeholder="Enter your password" style={styles.input} onChange={(e) => {
                         setPassword(e.target.value);
                     }}/>
-                </div>*/}
+                </div>
                 <div>
                     <button type="submit" style={styles.button} onClick={handleLoginSubmit}>Login</button>
                     <button type="submit" style={styles.button} onClick={handleSignUpSubmit}>Sign Up</button>
