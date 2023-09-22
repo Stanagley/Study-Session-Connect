@@ -24,17 +24,6 @@ function AboutPage() {
                     In today's fast-paced academic environment, students often face challenges when it comes to finding effective study partners and coordinating study sessions. To address this need, we propose the development of a dynamic and user-friendly platform called Study Session Connect. This platform will revolutionize the way students collaborate for enhanced learning experiences.
                 </p>
             </div>
-
-            <div style={styles.section}>
-                <h2 style={styles.sectionTitle}>Key Features:</h2>
-                {/* ...Add the rest of the key features... */}
-                {/* Example: */}
-                <p><strong>User-Friendly Interface:</strong> The Study Session Connect platform will boast an intuitive interface that welcomes students with a seamless user experience. Navigation will be straightforward, ensuring easy access to various features.</p>
-                {/* ...continue with other features... */}
-            </div>
-
-            {/* You can continue the structure for Benefits, Conclusion, etc. in the same pattern. */}
-
         </div>
     );
 }
