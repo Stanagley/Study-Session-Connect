@@ -29,7 +29,17 @@ function LoginPage() {
 
     const callUserAPI = async () => {
         try {
-            const response = await fetch('http://localhost:9000/users');
+            const options = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+        "Access-Control-Request-Headers": "*",
+        "Access-Control-Request-Method": "*"
+                },
+                body: JSON.stringify({ username: username, password: password})
+            }
+            const response = await fetch('http://localhost:9000/login', options);
+            // callback(response);
             const users = await response.json();
             console.log({ users });
         }
