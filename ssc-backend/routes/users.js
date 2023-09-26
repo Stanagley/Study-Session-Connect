@@ -23,6 +23,5 @@ router.get('/', function(req, res, next) {
     password: 'king-arthur'
   }]);
   // res.send('respond with a resource');
-  
 });
 module.exports = router;
