@@ -7,7 +7,20 @@ function SearchPage() {
         title: { fontSize: '2em', marginBottom: '20px' },
         description: { marginBottom: '30px' },
         button: { padding: '10px 20px', cursor: 'pointer', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px' },
-        searchResults: { marginTop: '20px' },
+        searchResults: {
+            marginTop: '20px',
+            backgroundColor: '#f5f5f5',
+            padding: '20px',
+            borderRadius: '5px',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        },
+        resultItem: {
+            marginBottom: '10px',
+            padding: '10px',
+            backgroundColor: 'white',
+            borderRadius: '5px',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        },
     };
 
     const [searchResults, setSearchResults] = useState([]); // State to store search results
@@ -23,7 +36,8 @@ function SearchPage() {
                     // You can customize this search logic as needed
                     if (searchBy === 'major') {
                         return user.major.toLowerCase().includes(query.toLowerCase());
-                    } else if (searchBy === 'location') {
+                    } 
+                    else if (searchBy === 'location') {
                         return user.location.toLowerCase().includes(query.toLowerCase());
                     }
                     else if (searchBy === 'class') {
@@ -33,8 +47,7 @@ function SearchPage() {
                         return user.time.toLowerCase().includes(query.toLowerCase());
                     }
                 });
-    
-                // Update the state with the filtered results
+
                 setSearchResults(filteredResults);
             })
             .catch((error) => {
@@ -61,11 +74,11 @@ function SearchPage() {
                 </label>
                 <label>
                     <input type="radio" value="class" checked={searchBy === 'class'} onChange={handleSearchCriteriaChange} />
-                    Class
+                    Location
                 </label>
                 <label>
                     <input type="radio" value="time" checked={searchBy === 'time'} onChange={handleSearchCriteriaChange} />
-                    Time
+                    Location
                 </label>
             </div>
             <p style={styles.description}>Enter your search query below:</p>
@@ -75,7 +88,7 @@ function SearchPage() {
                 {searchResults.length > 0 ? (
                     <ul>
                         {searchResults.map((result) => (
-                            <li key={result.id}>
+                            <li key={result.id} style={styles.resultItem}>
                                 <p>ID: {result.id}</p>
                                 <p>Location: {result.location}</p>
                                 <p>Major: {result.major}</p>
