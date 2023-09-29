@@ -41,3 +41,9 @@ promotes accountability and encourages a supportive learning community.
 User privacy will be a top priority. Only registered users from verified educational institutions will
 be able to access and participate in study sessions. Personal information will be safeguarded
 using the latest security measures.
+
+### Set Up PostgreSQL
+View this link to view our tutorial: https://docs.google.com/document/d/1mHBzL8J2pd-tln1dr07QcN6ErOZZdijA0th8h0crGHY/edit
+Scheme: Users(username, password), Sessions(id, location, major, course, time, participants)
+Character varrying, length: 255: username, password, location, major, course
+integer: id, time, participants
