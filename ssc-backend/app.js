@@ -52,4 +52,21 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.post('/sessions', async (req, res) => {
+  try {
+      const { location, major, class_name, time } = req.body;
+
+      const newSession = await pool.query(
+          "INSERT INTO sessions (location, major, class_name, time) VALUES ($1, $2, $3, $4) RETURNING *",
+          [location, major, class_name, time]
+      );
+
+      res.json(newSession.rows[0]);
+
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+  }
+});
+
 module.exports = app;
