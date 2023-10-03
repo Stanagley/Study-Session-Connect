@@ -53,8 +53,8 @@ function LoginPage() {
             <h2>Login</h2>
             <form>
                 <div>
-                    <label>Email:</label>
-                    <input type="email" placeholder="Enter your email" style={styles.input} onChange={(e) => {
+                    <label>Username:</label>
+                    <input type="username" placeholder="Enter your username" style={styles.input} onChange={(e) => {
                         setUsername(e.target.value);
                     }}/>
                 </div>
