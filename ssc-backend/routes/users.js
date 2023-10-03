@@ -9,11 +9,15 @@ router.get('/', function(req, res, next) {
 module.exports = router;*/
 
 var express = require('express');
+const db = require('../server')
+//app.get('/users', db.getUsers)
 var router = express.Router();
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.set('Access-Control-Allow-Origin', '*');
-  res.json([{
+  // console.log(db.getUsers);
+  res.json(db.getUsers);
+  /*res.json([{
     id: 1,
     name: "Hiccup",
     password: 'hiccup'
@@ -21,7 +25,7 @@ router.get('/', function(req, res, next) {
     id: 2,
     name: "King Arthur",
     password: 'king-arthur'
-  }]);
+  }]);*/
   // res.send('respond with a resource');
 });
 module.exports = router;

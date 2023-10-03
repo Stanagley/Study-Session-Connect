@@ -1,29 +1,36 @@
-const express = require('express');
-const cors = require('cors');
-const { Pool } = require('pg');
-
-const app = express();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// PostgreSQL connection using pg's Pool
+const Pool = require('pg').Pool
 const pool = new Pool({
-    user: 'YOUR_DB_USER',
-    host: 'localhost',
-    database: 'YOUR_DB_NAME',
-    password: 'YOUR_DB_PASSWORD',
-    port: 5432,
+  user: 'postgres',
+  host: 'localhost',
+  database: 'ssc',
+  password: 'postgres',
+  port: 5432,
 });
 
-// Test route
-app.get('/', (req, res) => {
-    res.send('Backend Server is running');
-});
+const getUsers = async (request, response) => {
+  const users = await pool.query('SELECT * FROM users', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
 
-// Start server
-const PORT = 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+const validateUser = async (request, response) => {
+  let submittedUsername = request.body.username;
+  let query = 'SELECT username, password FROM users WHERE username=\'' + submittedUsername + '\''
+  const users = await pool.query(query, (error, results) => {
+    if (error) {
+      throw error
+    }
+    let hold = results.rows;
+    let password = hold[0].password
+    let success = password == request.body.password;
+    response.status(200).json({"value": success});
+  })
+}
+
+module.exports = {
+    getUsers,
+    validateUser
+  }
