@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function CreateSessionPage() {
     const [formData, setFormData] = useState({
@@ -13,10 +14,20 @@ function CreateSessionPage() {
         setFormData(prevState => ({ ...prevState, [name]: value }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         console.log('Form Data Submitted:', formData);
         // ADD FUNCTIONALITY TO SEND DATA TO BACKEND
+        try {
+            // Send a POST request to your backend
+            const response = await axios.post('http://localhost:5000/sessions', formData);
+    
+            // Handle successful response (e.g., show a success message)
+            console.log('Data saved:', response.data);
+        } catch (error) {
+            // Handle errors (e.g., show an error message to the user)
+            console.error('Error submitting form:', error);
+        }
     };
 
     const styles = {
