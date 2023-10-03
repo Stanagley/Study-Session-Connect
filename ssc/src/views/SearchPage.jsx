@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchBar from '../components/SearchBar';
 
 function SearchPage() {
@@ -25,30 +25,19 @@ function SearchPage() {
 
     const [searchResults, setSearchResults] = useState([]); // State to store search results
     const [searchBy, setSearchBy] = useState('major'); // Default search criteria is 'major'
+    const [query, setQuery] = useState(''); // Search query
 
-    const handleSearch = (query) => {
-        // Fetch data from the JSON file
-        fetch('http://localhost:9000/users')
+    useEffect(() => {
+        // Trigger the initial search when the component mounts
+        performSearch(query, searchBy);
+    }, []); // The empty array [] means this effect runs once when the component mounts
+
+    const performSearch = (searchQuery, searchCriteria) => {
+        // Make an HTTP GET request to your Express backend's /search endpoint
+        fetch(`http://localhost:9000/search?query=${searchQuery}&searchBy=${searchCriteria}`)
             .then((response) => response.json())
             .then((data) => {
-                // Implement a search algorithm to filter the results based on the selected criteria
-                const filteredResults = data.filter((user) => {
-                    // You can customize this search logic as needed
-                    if (searchBy === 'major') {
-                        return user.major.toLowerCase().includes(query.toLowerCase());
-                    } 
-                    else if (searchBy === 'location') {
-                        return user.location.toLowerCase().includes(query.toLowerCase());
-                    }
-                    else if (searchBy === 'class') {
-                        return user.class.toLowerCase().includes(query.toLowerCase());
-                    }
-                    else if (searchBy === 'time') {
-                        return user.time.toLowerCase().includes(query.toLowerCase());
-                    }
-                });
-
-                setSearchResults(filteredResults);
+                setSearchResults(data);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -56,8 +45,20 @@ function SearchPage() {
     };
 
     const handleSearchCriteriaChange = (event) => {
-        setSearchBy(event.target.value);
+        const newSearchBy = event.target.value;
+        setSearchBy(newSearchBy);
+
+        // Trigger a search when the search criteria changes
+        performSearch(query, newSearchBy);
     };
+
+    const handleSearch = (newQuery) => {
+        setQuery(newQuery);
+
+        // Trigger a search when the query changes
+        performSearch(newQuery, searchBy);
+    };
+
 
     return (
         <div style={styles.container}>
@@ -74,11 +75,11 @@ function SearchPage() {
                 </label>
                 <label>
                     <input type="radio" value="class" checked={searchBy === 'class'} onChange={handleSearchCriteriaChange} />
-                    Location
+                    Class
                 </label>
                 <label>
                     <input type="radio" value="time" checked={searchBy === 'time'} onChange={handleSearchCriteriaChange} />
-                    Location
+                    Time
                 </label>
             </div>
             <p style={styles.description}>Enter your search query below:</p>

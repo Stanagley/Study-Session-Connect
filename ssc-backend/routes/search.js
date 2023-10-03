@@ -1,16 +1,9 @@
 const express = require('express');
-const app = express();
-const cors = require('cors');
-
-// Require your search router module
-const searchRouter = require('./routes/search');
-
-app.use(cors());
-
-app.use('/', searchRouter);
+const fetch = require('node-fetch');
+const router = express.Router();
 
 // Define a route for handling searches
-app.get('/', async (req, res) => {
+router.get('/', async (req, res) => {
     const query = req.query.query; // Get the search query from the request query parameters
     const searchBy = req.query.searchBy; // Get the search criteria from the request query parameters
 
@@ -40,9 +33,4 @@ app.get('/', async (req, res) => {
     }
 });
 
-// Start the Express server
-app.listen(9000, () => {
-    console.log('Server is running on port 9000');
-});
-
-modules.exports = app;
+module.exports = router;
