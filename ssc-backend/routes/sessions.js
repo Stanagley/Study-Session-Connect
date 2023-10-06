@@ -1,32 +1,37 @@
-/*var express = require('express');
-var router = express.Router();
-
-/* GET users listing. *
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
-module.exports = router;*/
-
 var express = require('express');
 var router = express.Router();
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.set('Access-Control-Allow-Origin', '*');
-  res.json([{
-    id: 1,
-    location: "heaven",
-    major: 'geology',
-    class: 'geo101',
-    time: 'never'
-  }, {
-    id: 2,
-    location: "hell",
-    major: 'cs',
-    class: 'rcass.in.my.mouth',
-    time: 'always'
-  }]);
-  // res.send('respond with a resource');
-  
+const { Pool } = require('pg');
+
+const pool = new Pool({
+    user: 'YOUR_DB_USER',
+    host: 'localhost',
+    database: 'YOUR_DB_NAME',
+    password: 'YOUR_DB_PASSWORD',
+    port: 5432,
 });
+
+router.get('/', async (req, res) => {
+    try {
+        const sessions = await pool.query("SELECT * FROM sessions");
+        res.json(sessions.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+router.post('/', async (req, res) => {
+    try {
+        const { location, major, class_name, time } = req.body;
+        const newSession = await pool.query(
+            "INSERT INTO sessions (location, major, class_name, time) VALUES ($1, $2, $3, $4) RETURNING *",
+            [location, major, class_name, time]
+        );
+        res.json(newSession.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
 module.exports = router;
