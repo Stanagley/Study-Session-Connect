@@ -9,20 +9,23 @@ router.get('/', async (req, res) => {
 
     try {
         // Fetch data from the JSON file or your data source
-        const response = await fetch('http://localhost:9000/users');
+        const response = await fetch('http://localhost:9000/');
         const data = await response.json();
 
         // Implement your search logic here
         const filteredResults = data.filter((user) => {
-            if (searchBy === 'major') {
-                return user.major.toLowerCase().includes(query.toLowerCase());
-            } else if (searchBy === 'location') {
-                return user.location.toLowerCase().includes(query.toLowerCase());
-            } else if (searchBy === 'class') {
-                return user.class.toLowerCase().includes(query.toLowerCase());
-            } else if (searchBy === 'time') {
-                return user.time.toLowerCase().includes(query.toLowerCase());
+            if (user && typeof user === 'object') {
+                if (searchBy === 'major' && user.major && typeof user.major === 'string' && user.major.toLowerCase().includes(query.toLowerCase())) {
+                    return true;
+                } else if (searchBy === 'location' && user.location && typeof user.location === 'string' && user.location.toLowerCase().includes(query.toLowerCase())) {
+                    return true;
+                } else if (searchBy === 'class' && user.class && typeof user.class === 'string' && user.class.toLowerCase().includes(query.toLowerCase())) {
+                    return true;
+                } else if (searchBy === 'time' && user.time && typeof user.time === 'string' && user.time.toLowerCase().includes(query.toLowerCase())) {
+                    return true;
+                }
             }
+            return false;
         });
 
         // Send the filtered results as JSON response
