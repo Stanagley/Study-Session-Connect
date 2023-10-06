@@ -3,11 +3,11 @@ var router = express.Router();
 const { Pool } = require('pg');
 
 const pool = new Pool({
-    user: 'YOUR_DB_USER',
-    host: 'localhost',
-    database: 'YOUR_DB_NAME',
-    password: 'YOUR_DB_PASSWORD',
-    port: 5432,
+  user: 'postgres',
+  host: 'localhost',
+  database: 'ssc',
+  password: 'postgres',
+  port: 5432,
 });
 
 router.get('/', async (req, res) => {
@@ -22,10 +22,10 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const { location, major, class_name, time } = req.body;
+        const { location, major, course, time } = req.body;
         const newSession = await pool.query(
-            "INSERT INTO sessions (location, major, class_name, time) VALUES ($1, $2, $3, $4) RETURNING *",
-            [location, major, class_name, time]
+            "INSERT INTO sessions (location, major, course, time) VALUES ($1, $2, $3, $4) RETURNING *",
+            [location, major, course, time]
         );
         res.json(newSession.rows[0]);
     } catch (err) {

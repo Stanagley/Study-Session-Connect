@@ -19,8 +19,14 @@ function CreateSessionPage() {
         console.log('Form Data Submitted:', formData);
         // ADD FUNCTIONALITY TO SEND DATA TO BACKEND
         try {
-            // Send a POST request to your backend
-            const response = await axios.post('http://localhost:5000/sessions', formData);
+            const options = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            }
+            const response = await fetch('http://localhost:9000/sessions', options);
     
             // Handle successful response (e.g., show a success message)
             console.log('Data saved:', response.data);
