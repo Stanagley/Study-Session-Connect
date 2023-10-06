@@ -11,6 +11,7 @@ function LoginPage() {
     const [password, setPassword] = useState('');
 
     const handleSignUpSubmit = (e) => {
+        e.preventDefault();
         console.log(username);
         console.log(password);
         // ADD FUNCTIONALITY DEAL WITH BACKEND
@@ -19,6 +20,7 @@ function LoginPage() {
     }
 
     const handleLoginSubmit = (e) => {
+        e.preventDefault();
         console.log(username);
         console.log(password);
         // ADD FUNCTIONALITY DEAL WITH BACKEND

@@ -24,7 +24,10 @@ const validateUser = async (request, response) => {
       throw error
     }
     let hold = results.rows;
-    let password = hold[0].password
+    let password = '';
+    if (hold.length > 0) {
+      password = hold[0].password;
+    }
     let success = password == request.body.password;
     response.status(200).json({"value": success});
   })
