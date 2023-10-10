@@ -26,6 +26,7 @@ function SearchPage() {
     const [searchResults, setSearchResults] = useState([]); // State to store search results
     const [searchBy, setSearchBy] = useState('major'); // Default search criteria is 'major'
     const [query, setQuery] = useState(''); // Search query
+    const [initialSearchPerformed, setInitialSearchPerformed] = useState(false); // Track whether the initial search has been performed
 
     useEffect(() => {
         // Trigger the initial search when the component mounts
@@ -38,6 +39,7 @@ function SearchPage() {
             .then((response) => response.json())
             .then((data) => {
                 setSearchResults(data);
+                setInitialSearchPerformed(true); // Set the flag to indicate the initial search has been performed
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -59,7 +61,6 @@ function SearchPage() {
         performSearch(newQuery, searchBy);
     };
 
-
     return (
         <div style={styles.container}>
             <h2 style={styles.title}>Search Page</h2>
@@ -74,8 +75,8 @@ function SearchPage() {
                     Location
                 </label>
                 <label>
-                    <input type="radio" value="class" checked={searchBy === 'class'} onChange={handleSearchCriteriaChange} />
-                    Class
+                    <input type="radio" value="course" checked={searchBy === 'course'} onChange={handleSearchCriteriaChange} />
+                    Course
                 </label>
                 <label>
                     <input type="radio" value="time" checked={searchBy === 'time'} onChange={handleSearchCriteriaChange} />
@@ -85,23 +86,24 @@ function SearchPage() {
             <p style={styles.description}>Enter your search query below:</p>
             <SearchBar onSearch={handleSearch} />
 
-            <div style={styles.searchResults}>
-                {searchResults.length > 0 ? (
-                    <ul>
-                        {searchResults.map((result) => (
-                            <li key={result.id} style={styles.resultItem}>
-                                <p>ID: {result.id}</p>
-                                <p>Location: {result.location}</p>
-                                <p>Major: {result.major}</p>
-                                <p>Class: {result.class}</p>
-                                <p>Time: {result.time}</p>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No search results found.</p>
-                )}
-            </div>
+            {initialSearchPerformed && ( // Conditionally render the results
+                <div style={styles.searchResults}>
+                    {searchResults.length > 0 ? (
+                        <ul>
+                            {searchResults.map((result) => (
+                                <li key={result.id} style={styles.resultItem}>
+                                    <p>Location: {result.location}</p>
+                                    <p>Major: {result.major}</p>
+                                    <p>Course: {result.course}</p>
+                                    <p>Time: {result.time}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No search results found.</p>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
