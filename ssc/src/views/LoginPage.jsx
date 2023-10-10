@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function LoginPage() {
+function LoginPage(props) {
     const styles = {
         container: { padding: '20px', maxWidth: '400px', margin: 'auto' },
         input: { width: '100%', padding: '10px', margin: '10px 0' },
@@ -35,15 +35,17 @@ function LoginPage() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Request-Headers": "*",
-                    "Access-Control-Request-Method": "*"
                 },
                 body: JSON.stringify({ username: username, password: password}),
             }
             const response = await fetch('http://localhost:9000/login', options);
-            // callback(response);
-            const users = await response.json();
-            console.log(users.value);
+            const success = await response.json();
+            console.log(success.value);
+            if (success.value) {
+                localStorage.setItem("username", username);
+                props.history.push('/profile');
+                window.location.reload();
+            }
         }
         catch (e) {
             console.log(e)

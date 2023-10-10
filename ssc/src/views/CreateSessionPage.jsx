@@ -3,9 +3,10 @@ import axios from 'axios';
 
 function CreateSessionPage() {
     const [formData, setFormData] = useState({
+        id: 0,
         location: '',
         major: '',
-        className: '',
+        course: '',
         time: ''
     });
 
@@ -16,8 +17,21 @@ function CreateSessionPage() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('Form Data Submitted:', formData);
         // ADD FUNCTIONALITY TO SEND DATA TO BACKEND
+        //Give form data an id
+        let new_maxId;
+        try {
+            const response = await fetch('http://localhost:9000/sessions/max-id'); //fetch max
+            const data = await response.json(); //record current max
+            console.log(data.maxId)
+            new_maxId = data.maxId + 1; //create new max
+        } catch (error) {
+            console.error('Error fetching max ID:', error);
+            return;
+        }
+        formData.id = new_maxId;
+
+        //Attempt to write to postgres
         try {
             const options = {
                 method: "POST",
@@ -34,6 +48,7 @@ function CreateSessionPage() {
             // Handle errors (e.g., show an error message to the user)
             console.error('Error submitting form:', error);
         }
+        console.log('Form Data Submitted:', formData);
     };
 
     const styles = {
@@ -62,9 +77,9 @@ function CreateSessionPage() {
             />
             <input
                 type="text"
-                name="className"
+                name="course"
                 placeholder="Class Name"
-                value={formData.className}
+                value={formData.course}
                 onChange={handleInputChange}
                 style={styles.input}
             />
