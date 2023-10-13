@@ -18,6 +18,8 @@ function NavBar(props) {
 
     function handleLogout() {
         localStorage.setItem("username", '');
+        localStorage.setItem('fname', '');
+        localStorage.setItem('lname', '');
         setLoggedInUser('');
     }
 

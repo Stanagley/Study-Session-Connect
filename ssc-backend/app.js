@@ -21,6 +21,8 @@ app.use(cors());
 const db = require('./server')
 app.get('/users', db.getUsers)
 app.post('/login', jsonParser, db.validateUser)
+app.post('/userInfo', jsonParser, db.getUserInfo)
+app.post('/setUserInfo', jsonParser, db.setUserInfo)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

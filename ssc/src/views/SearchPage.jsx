@@ -23,18 +23,16 @@ function SearchPage() {
         },
     };
 
-    const [searchResults, setSearchResults] = useState([]); // State to store search results
-    const [searchBy, setSearchBy] = useState('major'); // Default search criteria is 'major'
-    const [query, setQuery] = useState(''); // Search query
-    const [initialSearchPerformed, setInitialSearchPerformed] = useState(false); // Track whether the initial search has been performed
+    const [searchResults, setSearchResults] = useState([]); 
+    const [searchBy, setSearchBy] = useState('all'); 
+    const [query, setQuery] = useState(''); 
+    const [initialSearchPerformed, setInitialSearchPerformed] = useState(false);
 
     useEffect(() => {
-        // Trigger the initial search when the component mounts
         performSearch(query, searchBy);
-    }, []); // The empty array [] means this effect runs once when the component mounts
+    }, []); 
 
     const performSearch = (searchQuery, searchCriteria) => {
-        // Make an HTTP GET request to your Express backend's /search endpoint
         fetch(`http://localhost:9000/search?query=${searchQuery}&searchBy=${searchCriteria}`)
             .then((response) => response.json())
             .then((data) => {
@@ -50,14 +48,12 @@ function SearchPage() {
         const newSearchBy = event.target.value;
         setSearchBy(newSearchBy);
 
-        // Trigger a search when the search criteria changes
         performSearch(query, newSearchBy);
     };
 
     const handleSearch = (newQuery) => {
         setQuery(newQuery);
 
-        // Trigger a search when the query changes
         performSearch(newQuery, searchBy);
     };
 
@@ -66,6 +62,10 @@ function SearchPage() {
             <h2 style={styles.title}>Search Page</h2>
             <p style={styles.description}>Select search criteria:</p>
             <div>
+                <label>
+                    <input type="radio" value="all" checked={searchBy === 'all'} onChange={handleSearchCriteriaChange} />
+                    All
+                </label>
                 <label>
                     <input type="radio" value="major" checked={searchBy === 'major'} onChange={handleSearchCriteriaChange} />
                     Major
@@ -86,12 +86,13 @@ function SearchPage() {
             <p style={styles.description}>Enter your search query below:</p>
             <SearchBar onSearch={handleSearch} />
 
-            {initialSearchPerformed && ( // Conditionally render the results
+            {initialSearchPerformed && ( 
                 <div style={styles.searchResults}>
                     {searchResults.length > 0 ? (
                         <ul>
                             {searchResults.map((result) => (
                                 <li key={result.id} style={styles.resultItem}>
+                                    <p>All: {result.all}</p>
                                     <p>Location: {result.location}</p>
                                     <p>Major: {result.major}</p>
                                     <p>Course: {result.course}</p>
