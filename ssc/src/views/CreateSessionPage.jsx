@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 function CreateSessionPage() {
     const [formData, setFormData] = useState({
@@ -15,23 +14,8 @@ function CreateSessionPage() {
         setFormData(prevState => ({ ...prevState, [name]: value }));
     };
 
-    const handleSubmit = async (event) => {
+    const insertPostgresSession = async (event) => {
         event.preventDefault();
-        // ADD FUNCTIONALITY TO SEND DATA TO BACKEND
-        //Give form data an id
-        let new_maxId;
-        try {
-            const response = await fetch('http://localhost:9000/sessions/max-id'); //fetch max
-            const data = await response.json(); //record current max
-            console.log(data.maxId)
-            new_maxId = data.maxId + 1; //create new max
-        } catch (error) {
-            console.error('Error fetching max ID:', error);
-            return;
-        }
-        formData.id = new_maxId;
-
-        //Attempt to write to postgres
         try {
             const options = {
                 method: "POST",
@@ -49,6 +33,25 @@ function CreateSessionPage() {
             console.error('Error submitting form:', error);
         }
         console.log('Form Data Submitted:', formData);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        //Give form data an id
+        let new_maxId;
+        try {
+            const response = await fetch('http://localhost:9000/sessions/max-id'); //fetch max
+            const data = await response.json(); //record current max
+            console.log(data.maxId)
+            new_maxId = data.maxId + 1; //create new max
+        } catch (error) {
+            console.error('Error fetching max ID:', error);
+            return;
+        }
+        formData.id = new_maxId;
+
+        //Attempt to write to postgres
+        insertPostgresSession();
     };
 
     const styles = {
