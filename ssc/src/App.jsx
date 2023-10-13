@@ -30,6 +30,7 @@ function App() {
                     <Route path="create-session" element={<CreateSessionPage />} />
                     <Route path="profile" element={<Profile />} />
                 </Routes>
+                <div className="spacer"></div>
                 <Footer />
             </div>
         </Router>
