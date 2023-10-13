@@ -7,6 +7,7 @@ import ContactPage from './views/ContactPage';
 import CreateSessionPage from './views/CreateSessionPage';
 import SearchPage from './views/SearchPage';
 import Profile from './views/Profile';
+import Onboarding from './views/Onboarding';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import history from './components/history';
@@ -28,7 +29,8 @@ function App() {
                     <Route path="" element={<HomePage />} />
                     <Route path="contact" element={<ContactPage />} />
                     <Route path="create-session" element={<CreateSessionPage />} />
-                    <Route path="profile" element={<Profile />} />
+                    <Route path="onboarding" element={<Onboarding history={history} />} />
+                    <Route path="profile" element={<Profile history={history} />} />
                 </Routes>
                 <Footer />
             </div>

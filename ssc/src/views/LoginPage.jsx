@@ -21,11 +21,6 @@ function LoginPage(props) {
 
     const handleLoginSubmit = (e) => {
         e.preventDefault();
-        console.log(username);
-        console.log(password);
-        // ADD FUNCTIONALITY DEAL WITH BACKEND
-        // 1. Check if user exists (no such user)
-        // 2. Check if correct password (incorrect password)
         callUserAPI();
     }
 
@@ -43,8 +38,9 @@ function LoginPage(props) {
             console.log(success.value);
             if (success.value) {
                 localStorage.setItem("username", username);
-                props.history.push('/profile');
+                props.history.push('/onboarding');
                 window.location.reload();
+                // getUserInfo();
             }
         }
         catch (e) {
