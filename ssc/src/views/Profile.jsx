@@ -1,8 +1,18 @@
+import { useEffect } from 'react';
+
 function Profile(props) {
+
+    useEffect(() => {
+        if (localStorage.getItem('username') == '') {
+            props.history.push('/login');
+            window.location.reload()
+        }
+    }, []);
+
     return (
         <div>
-            profile for
-            <p>{localStorage.getItem('username')}</p>
+            <div>profile for {localStorage.getItem('username')}</div>
+            <div>profile for {localStorage.getItem('fname')} {localStorage.getItem('lname')}</div>
         </div>
     );
 }
