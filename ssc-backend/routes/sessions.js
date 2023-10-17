@@ -26,8 +26,34 @@ router.get('/times-participating', async(req, res) => {
     }
 });
 
+router.post('/is-in', async (req, res) => {
+    const{ username, session_id } = req.body
+    try {
+        const exists = await pool.query(
+            "SELECT exists(SELECT 1 from attendees WHERE username=$1 AND session_id=$2) AS response",
+            [username, session_id]
+        );
+        const ans = exists.rows[0].response;
+        res.json({isIN: ans});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Error with is-in query')
+    }
+});
+
 router.post('/join-session', async (req, res) => {
     const { username, session_id } = req.body;
+
+    // Check if user is already in the session
+    const exists = await pool.query(
+        "SELECT exists(SELECT 1 from attendees WHERE username=$1 AND session_id=$2) AS response",
+        [username, session_id]
+    );
+    const isAlreadyJoined = exists.rows[0].response;
+
+    if (isAlreadyJoined) {
+        return res.status(400).json({ message: 'You have already joined this session.' });
+    }
 
     try {
         // Add user to attendees
@@ -39,7 +65,7 @@ router.post('/join-session', async (req, res) => {
         // Increment participants count in sessions
         await pool.query(
             "UPDATE sessions SET participants = participants + 1 WHERE id = $1",
-            [sessionId]
+            [session_id]
         );
 
         res.json({ message: 'Joined the session successfully' });
@@ -51,6 +77,17 @@ router.post('/join-session', async (req, res) => {
 
 router.post('/leave-session', async (req, res) => {
     const { username, session_id } = req.body;
+
+    // Check if user is in the session
+    const exists = await pool.query(
+        "SELECT exists(SELECT 1 from attendees WHERE username=$1 AND session_id=$2) AS response",
+        [username, session_id]
+    );
+    const isParticipant = exists.rows[0].response;
+
+    if (!isParticipant) {
+        return res.status(400).json({ message: 'You are not in this session.' });
+    }
 
     try {
         // Remove user from attendees
@@ -71,6 +108,7 @@ router.post('/leave-session', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
 
 router.get('/max-id', async (req, res) => {
   try {
