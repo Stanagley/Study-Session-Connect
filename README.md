@@ -44,6 +44,7 @@ using the latest security measures.
 
 ### Set Up PostgreSQL
 View this link to view our tutorial: https://docs.google.com/document/d/1mHBzL8J2pd-tln1dr07QcN6ErOZZdijA0th8h0crGHY/edit
-Scheme: Users(username, password), Sessions(id, location, major, course, time, participants)
-Character varrying, length: 255: username, password, location, major, course, time
-integer: id, participants
+Scheme: Users(username: Character varrying(255), password: Character varrying(255)),
+Sessions(id: Integer, location: Character varrying(255), major: Character varrying(255), course: Character varrying(255), time: Character varrying(255), participants: Integer),
+Attendees(username: Character varrying(255), session_id: Integer),
+Profiles(username: Character varrying(255), fname: Character varrying(255), lname: Character varrying(255), major: Character varrying(255), gradYear: Integer)
