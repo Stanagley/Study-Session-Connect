@@ -21,23 +21,28 @@ router.get('/', async (req, res) => {
       return res.status(400).json({ error: 'Invalid search criteria' });
     }
 
-    let sql;
-    let queryParams;
-
     if (searchBy === 'all') {
-      sql = `SELECT t.* FROM sessions t WHERE (t.*)::text LIKE '%$1%'`;
-      queryParams = [`%${query}%`];
-    } else {
-      sql = `SELECT * FROM sessions WHERE ${searchBy} ILIKE $1`;
-      queryParams = [`%${query}%`];
-    }
-    const { rows } = await pool.query(sql, queryParams);
+      const columnsToSearch = ['location', 'major', 'course', 'time'];
 
-    res.json(rows);
+      const concatenatedQueries = columnsToSearch.map((column) => `(${column}::text ILIKE $1)`).join(' OR ');
+      const sql = `SELECT * FROM sessions WHERE ${concatenatedQueries}`;
+      const queryParams = [`%${query}%`];
+
+      const { rows } = await pool.query(sql, queryParams);
+      res.json(rows);
+    } else {
+      let sql = `SELECT * FROM sessions WHERE ${searchBy} ILIKE $1`;
+      let queryParams = [`%${query}%`];
+    
+      const { rows } = await pool.query(sql, queryParams);
+
+      res.json(rows);
+    }
   } catch (error) {
     console.error('Error executing the query:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 module.exports = router;
