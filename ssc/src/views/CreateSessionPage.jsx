@@ -14,8 +14,7 @@ function CreateSessionPage() {
         setFormData(prevState => ({ ...prevState, [name]: value }));
     };
 
-    const insertPostgresSession = async (event) => {
-        event.preventDefault();
+    const insertPostgresSession = async () => {
         try {
             const options = {
                 method: "POST",
@@ -24,35 +23,35 @@ function CreateSessionPage() {
                 },
                 body: JSON.stringify(formData),
             }
-            const response = await fetch('http://localhost:9000/sessions', options);
-    
-            // Handle successful response (e.g., show a success message)
-            console.log('Data saved:', response.data);
+            const response = await fetch('http://localhost:9000/sessions/', options);
+            const responseData = await response.json();
+            console.log('Data saved:', responseData);
         } catch (error) {
-            // Handle errors (e.g., show an error message to the user)
             console.error('Error submitting form:', error);
         }
         console.log('Form Data Submitted:', formData);
     };
-
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
-        //Give form data an id
+        // Give form data an id
         let new_maxId;
         try {
-            const response = await fetch('http://localhost:9000/sessions/max-id'); //fetch max
-            const data = await response.json(); //record current max
-            console.log(data.maxId)
-            new_maxId = data.maxId + 1; //create new max
+            const response = await fetch('http://localhost:9000/sessions/max-id'); // fetch max
+            const data = await response.json(); // record current max
+            new_maxId = data.maxId + 1; // create new max
         } catch (error) {
             console.error('Error fetching max ID:', error);
             return;
         }
-        formData.id = new_maxId;
-
-        //Attempt to write to postgres
+    
+        // Update the formData state using setFormData
+        setFormData(prevState => ({ ...prevState, id: new_maxId }));
+    
+        // Attempt to write to postgres
         insertPostgresSession();
     };
+    
 
     const styles = {
         form: { display: 'flex', flexDirection: 'column', maxWidth: '300px', margin: 'auto' },
