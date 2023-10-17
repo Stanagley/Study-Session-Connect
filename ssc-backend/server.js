@@ -35,7 +35,7 @@ const validateUser = async (request, response) => {
 
 const getUserInfo = async (request, response) => {
   let submittedUsername = request.body.username;
-  let query = 'SELECT fname, lname FROM profiles WHERE username=\'' + submittedUsername + '\''
+  let query = 'SELECT fname, lname, major, gradyear FROM profiles WHERE username=\'' + submittedUsername + '\''
   const users = await pool.query(query, (error, results) => {
     if (error) {
       throw error
@@ -49,7 +49,9 @@ const setUserInfo = async (request, response) => {
   let submittedUsername = request.body.username;
   let submittedFirstName = request.body.firstName;
   let submittedLastName = request.body.lastName;
-  let query = 'INSERT INTO profiles(username, fname, lname) VALUES (\'' + submittedUsername + '\', \'' + submittedFirstName + '\', \'' + submittedLastName + '\')'
+  let submittedMajor = request.body.major;
+  let submittedGradYear = request.body.gradYear;
+  let query = 'INSERT INTO profiles(username, fname, lname, major, gradyear) VALUES (\'' + submittedUsername + '\', \'' + submittedFirstName + '\', \'' + submittedLastName + '\', \'' + submittedMajor + '\', \'' + submittedGradYear + '\')'
   const users = await pool.query(query, (error, results) => {
     if (error) {
       throw error
