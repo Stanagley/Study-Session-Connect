@@ -27,6 +27,10 @@ function SearchPage() {
     const [searchBy, setSearchBy] = useState('all'); 
     const [query, setQuery] = useState(''); 
     const [initialSearchPerformed, setInitialSearchPerformed] = useState(false);
+    
+    const handleJoinSession = (sessionId) => {
+        console.log(`Joining session ${sessionId}`);
+    };
 
     useEffect(() => {
         performSearch(query, searchBy);
@@ -97,6 +101,7 @@ function SearchPage() {
                                     <p>Major: {result.major}</p>
                                     <p>Course: {result.course}</p>
                                     <p>Time: {result.time}</p>
+                                    <button onClick={() => handleJoinSession(result.id)}>Join Session</button>
                                 </li>
                             ))}
                         </ul>
