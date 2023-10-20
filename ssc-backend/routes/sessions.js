@@ -139,7 +139,7 @@ router.post('/', async (req, res) => {
     try {
         const { id, location, major, course, time } = req.body;
         const newSession = await pool.query(
-            "INSERT INTO sessions (id, location, major, course, time) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+            "INSERT INTO sessions (id, location, major, course, time, participants) VALUES ($1, $2, $3, $4, $5, 0) RETURNING *",
             [id, location, major, course, time]
         );
         res.json(newSession.rows[0]);
