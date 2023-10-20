@@ -33,6 +33,30 @@ const validateUser = async (request, response) => {
   })
 }
 
+const signupUser = async (request, response) => {
+  let submittedUsername = request.body.username;
+  let submittedPassword = request.body.password;
+  let query1 = 'SELECT username FROM users WHERE username=\'' + submittedUsername + '\''
+  let exists = false;
+  let query2 = 'INSERT INTO users(username, password) VALUES(\'' + submittedUsername + '\', \'' + submittedPassword + '\')'
+  const users = await pool.query(query1, async (error, results) => {
+    if (error) {
+      throw error
+    }
+    exists = results.rowCount > 0;
+    if (exists) {
+      response.status(200).json({"value": false});
+    } else {
+      const use = await pool.query(query2, (e2, r2) => {
+        if (error) {
+          throw error
+        }
+        response.status(200).json({"value": true});
+      })
+    }
+  })
+}
+
 const getUserInfo = async (request, response) => {
   let submittedUsername = request.body.username;
   let query = 'SELECT fname, lname, major, gradyear FROM profiles WHERE username=\'' + submittedUsername + '\''
@@ -64,6 +88,7 @@ const setUserInfo = async (request, response) => {
 module.exports = {
     getUsers,
     validateUser,
+    signupUser,
     getUserInfo,
     setUserInfo
   }
