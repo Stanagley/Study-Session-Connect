@@ -28,9 +28,60 @@ function SearchPage() {
     const [query, setQuery] = useState(''); 
     const [initialSearchPerformed, setInitialSearchPerformed] = useState(false);
     
-    const handleJoinSession = (sessionId) => {
+    const handleJoinSession = async (sessionId) => {
         console.log(`Joining session ${sessionId}`);
+    
+        const requestBody = {
+            username: localStorage.getItem('username'),
+            session_id: sessionId,
+        };
+    
+        try {
+            const response = await fetch('http://localhost:9000/sessions/join-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+    
+            const data = await response.json();
+            console.log(data.message);
+    
+            // Optionally, refresh the search results or perform other UI updates here.
+        } catch (error) {
+            console.error('Error joining the session:', error);
+        }
     };
+    
+    
+
+    const handleLeaveSession = async (sessionId) => {
+        console.log(`Leaving session ${sessionId}`);
+    
+        const requestBody = {
+            username: localStorage.getItem('username'),
+            session_id: sessionId,
+        };
+    
+        try {
+            const response = await fetch('http://localhost:9000/sessions/leave-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+    
+            const data = await response.json();
+            console.log(data.message);
+    
+            // Optionally, refresh the search results or perform other UI updates here.
+        } catch (error) {
+            console.error('Error leaving the session:', error);
+        }
+    };
+    
 
     useEffect(() => {
         performSearch(query, searchBy);
