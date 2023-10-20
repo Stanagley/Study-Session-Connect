@@ -11,8 +11,8 @@ const pool = new Pool({
 });
 
 router.get('/', async (req, res) => {
-  const query = req.query.query; 
-  const searchBy = req.query.searchBy; 
+  const query = req.query.query;
+  const searchBy = req.query.searchBy;
 
   try {
     const validSearchCriteria = ['all', 'location', 'major', 'course', 'time'];
@@ -24,16 +24,18 @@ router.get('/', async (req, res) => {
     if (searchBy === 'all') {
       const columnsToSearch = ['location', 'major', 'course', 'time'];
 
-      const concatenatedQueries = columnsToSearch.map((column) => `(${column}::text ILIKE $1)`).join(' OR ');
-      const sql = `SELECT * FROM sessions WHERE ${concatenatedQueries}`;
+      const concatenatedQueries = columnsToSearch
+        .map((column) => `(${column}::text ILIKE $1)`)
+        .join(' OR ');
+      const sql = `SELECT id, * FROM sessions WHERE ${concatenatedQueries}`;
       const queryParams = [`%${query}%`];
 
       const { rows } = await pool.query(sql, queryParams);
       res.json(rows);
     } else {
-      let sql = `SELECT * FROM sessions WHERE ${searchBy} ILIKE $1`;
+      let sql = `SELECT id, * FROM sessions WHERE ${searchBy} ILIKE $1`;
       let queryParams = [`%${query}%`];
-    
+
       const { rows } = await pool.query(sql, queryParams);
 
       res.json(rows);
@@ -43,6 +45,5 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 module.exports = router;

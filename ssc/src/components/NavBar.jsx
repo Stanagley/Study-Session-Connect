@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import blank_profile from '../assets/blank_profile.png';
+import ssclogo from '../assets/ssclogo.jpg'
 
 function NavBar(props) {
 
@@ -13,6 +14,7 @@ function NavBar(props) {
         li: { display: 'inline', margin: '0 10px', marginTop: 'auto', marginBottom: 'auto'},
         a: { color: 'white', textDecoration: 'none' },
         img: { borderRadius: '50%', height: '30px', width: '30px'},
+        logo: { height: '1px', width: '1px'},
         dropdownDiv: { backgroundColor: 'white', position: 'absolute', border: '1px #333 solid', borderRadius: '3px' },
         dropdownUl: { listStyleType: 'none', padding: '10px 10px 0 10px' },
         dropdownLi: { marginBottom: '10px' },
@@ -35,11 +37,14 @@ function NavBar(props) {
     // Will Be a drop down menu later, now just for testing purposes b/c high priority goals exist
     return (
         <nav style={styles.nav}>
+            <div style={styles.logo}>
+                <img src={ssclogo} alt="SSC Logo" style={styles.img} />
+            </div>
             <ul style={styles.ul}>
                 <li style={styles.li}><Link to="/" style={styles.a}>Home</Link></li>
                 <li style={styles.li}><a href="/create-session" style={styles.a}>Create Session</a></li>
                 <li style={styles.li}><Link to="/search" style={styles.a}>Search</Link></li>
-                {loggedInUser == '' || loggedInUser == null ? 
+                {loggedInUser === '' || loggedInUser === null ? 
                 <li style={styles.li}><Link to="/login" style={styles.a}>Login</Link></li> :
                 <li 
                     style={styles.li} 

@@ -27,21 +27,21 @@ function SearchPage() {
     const [searchBy, setSearchBy] = useState('all'); 
     const [query, setQuery] = useState(''); 
     const [initialSearchPerformed, setInitialSearchPerformed] = useState(false);
-    
+
     const handleJoinSession = (sessionId) => {
         console.log(`Joining session ${sessionId}`);
     };
 
     useEffect(() => {
         performSearch(query, searchBy);
-    }, []); 
+    }, []);
 
     const performSearch = (searchQuery, searchCriteria) => {
         fetch(`http://localhost:9000/search?query=${searchQuery}&searchBy=${searchCriteria}`)
             .then((response) => response.json())
             .then((data) => {
                 setSearchResults(data);
-                setInitialSearchPerformed(true); // Set the flag to indicate the initial search has been performed
+                setInitialSearchPerformed(true);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -96,7 +96,7 @@ function SearchPage() {
                         <ul>
                             {searchResults.map((result) => (
                                 <li key={result.id} style={styles.resultItem}>
-                                    <p>All: {result.all}</p>
+                                    <p>ID: {result.id}</p>
                                     <p>Location: {result.location}</p>
                                     <p>Major: {result.major}</p>
                                     <p>Course: {result.course}</p>
