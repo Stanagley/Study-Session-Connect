@@ -27,7 +27,7 @@ function SearchPage() {
     const [searchBy, setSearchBy] = useState('all'); 
     const [query, setQuery] = useState(''); 
     const [initialSearchPerformed, setInitialSearchPerformed] = useState(false);
-
+    
     const handleJoinSession = (sessionId) => {
         console.log(`Joining session ${sessionId}`);
     };
@@ -101,7 +101,8 @@ function SearchPage() {
                                     <p>Major: {result.major}</p>
                                     <p>Course: {result.course}</p>
                                     <p>Time: {result.time}</p>
-                                    <button onClick={() => handleJoinSession(result.id)}>Join Session</button>
+                                    <button onClick={() => handleJoinSession(result.id)} style={{ ...styles.button, marginLeft: '10px' }}>Join Session</button>
+                                    <button onClick={() => handleLeaveSession(result.id)} style={{ ...styles.button, marginLeft: '10px' }}>Leave Session</button>
                                 </li>
                             ))}
                         </ul>
