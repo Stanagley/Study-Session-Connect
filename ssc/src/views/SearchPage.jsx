@@ -48,6 +48,7 @@ function SearchPage() {
             const data = await response.json();
             console.log(data.message);
     
+            performSearch(query, searchBy);
             // Optionally, refresh the search results or perform other UI updates here.
         } catch (error) {
             console.error('Error joining the session:', error);
@@ -75,7 +76,8 @@ function SearchPage() {
     
             const data = await response.json();
             console.log(data.message);
-    
+            
+            performSearch(query, searchBy);
             // Optionally, refresh the search results or perform other UI updates here.
         } catch (error) {
             console.error('Error leaving the session:', error);
@@ -152,6 +154,7 @@ function SearchPage() {
                                     <p>Major: {result.major}</p>
                                     <p>Course: {result.course}</p>
                                     <p>Time: {result.time}</p>
+                                    <p>Participants: {result.participants}</p>
                                     <button onClick={() => handleJoinSession(result.id)} style={{ ...styles.button, marginLeft: '10px' }}>Join Session</button>
                                     <button onClick={() => handleLeaveSession(result.id)} style={{ ...styles.button, marginLeft: '10px' }}>Leave Session</button>
                                 </li>

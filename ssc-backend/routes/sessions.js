@@ -136,6 +136,9 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+    // const response = await fetch('http://localhost:9000/sessions/max-id');
+    // const data = await response.json();
+    // let new_id = data.maxId + 1
     try {
         const { id, location, major, course, time } = req.body;
         const newSession = await pool.query(
