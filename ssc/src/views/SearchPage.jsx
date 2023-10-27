@@ -1,41 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import SearchBar from '../components/SearchBar';
+import '../styles/SearchPage.css';
 
 function SearchPage() {
-    const styles = {
-        container: { padding: '50px 20px', textAlign: 'center' },
-        title: { fontSize: '2em', marginBottom: '20px' },
-        description: { marginBottom: '30px' },
-        button: { padding: '10px 20px', cursor: 'pointer', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '5px' },
-        searchResults: {
-            marginTop: '20px',
-            backgroundColor: '#f5f5f5',
-            padding: '20px',
-            borderRadius: '5px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-        },
-        resultItem: {
-            marginBottom: '10px',
-            padding: '10px',
-            backgroundColor: 'white',
-            borderRadius: '5px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-        },
-    };
-
     const [searchResults, setSearchResults] = useState([]); 
     const [searchBy, setSearchBy] = useState('all'); 
     const [query, setQuery] = useState(''); 
     const [initialSearchPerformed, setInitialSearchPerformed] = useState(false);
-    
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [queryHistory, setQueryHistory] = useState([]);
+    const MAX_QUERY_HISTORY = 3;
+
+
+    useEffect(() => {
+        const storedQueries = JSON.parse(localStorage.getItem('previousQueries')) || [];
+        setQueryHistory(storedQueries);
+    }, []);
+
+
     const handleJoinSession = async (sessionId) => {
         console.log(`Joining session ${sessionId}`);
-    
+
         const requestBody = {
             username: localStorage.getItem('username'),
             session_id: sessionId,
         };
-    
+
         try {
             const response = await fetch('http://localhost:9000/sessions/join-session', {
                 method: 'POST',
@@ -44,27 +34,24 @@ function SearchPage() {
                 },
                 body: JSON.stringify(requestBody),
             });
-    
+
             const data = await response.json();
             console.log(data.message);
-    
-            performSearch(query, searchBy);
-            // Optionally, refresh the search results or perform other UI updates here.
+
         } catch (error) {
             console.error('Error joining the session:', error);
         }
     };
-    
-    
+
 
     const handleLeaveSession = async (sessionId) => {
         console.log(`Leaving session ${sessionId}`);
-    
+
         const requestBody = {
             username: localStorage.getItem('username'),
             session_id: sessionId,
         };
-    
+
         try {
             const response = await fetch('http://localhost:9000/sessions/leave-session', {
                 method: 'POST',
@@ -73,22 +60,23 @@ function SearchPage() {
                 },
                 body: JSON.stringify(requestBody),
             });
-    
+
             const data = await response.json();
             console.log(data.message);
-            
+
             performSearch(query, searchBy);
-            // Optionally, refresh the search results or perform other UI updates here.
+
         } catch (error) {
             console.error('Error leaving the session:', error);
         }
     };
-    
+
 
     useEffect(() => {
         performSearch(query, searchBy);
     }, []);
 
+    
     const performSearch = (searchQuery, searchCriteria) => {
         fetch(`http://localhost:9000/search?query=${searchQuery}&searchBy=${searchCriteria}`)
             .then((response) => response.json())
@@ -101,6 +89,7 @@ function SearchPage() {
             });
     };
 
+
     const handleSearchCriteriaChange = (event) => {
         const newSearchBy = event.target.value;
         setSearchBy(newSearchBy);
@@ -108,16 +97,36 @@ function SearchPage() {
         performSearch(query, newSearchBy);
     };
 
+
     const handleSearch = (newQuery) => {
         setQuery(newQuery);
+        setShowSuggestions(false); 
+
+        setQueryHistory((prevHistory) => {
+            const updatedHistory = [newQuery, ...prevHistory];
+            if (updatedHistory.length > MAX_QUERY_HISTORY) {
+                updatedHistory.pop();
+            }
+            return updatedHistory;
+        });
+
+        localStorage.setItem('previousQueries', JSON.stringify(queryHistory));
 
         performSearch(newQuery, searchBy);
     };
 
+
+    const handleInputChange = (event) => {
+        const input = event.target.value;
+        setQuery(input);
+        setShowSuggestions(true);
+    };
+    
+
     return (
-        <div style={styles.container}>
-            <h2 style={styles.title}>Search Page</h2>
-            <p style={styles.description}>Select search criteria:</p>
+        <div className="container">
+            <h2 className="title">Search Page</h2>
+            <p className="description">Select search criteria:</p>
             <div>
                 <label>
                     <input type="radio" value="all" checked={searchBy === 'all'} onChange={handleSearchCriteriaChange} />
@@ -140,23 +149,29 @@ function SearchPage() {
                     Time
                 </label>
             </div>
-            <p style={styles.description}>Enter your search query below:</p>
-            <SearchBar onSearch={handleSearch} />
+            <p className="description">Enter your search query below:</p>
+            <SearchBar
+                onSearch={handleSearch}
+                query={query}
+                onInputChange={handleInputChange}
+                querySuggestions={queryHistory}
+                showSuggestions={showSuggestions}
+            />
 
-            {initialSearchPerformed && ( 
-                <div style={styles.searchResults}>
+            {initialSearchPerformed && (
+                <div className="searchResults">
                     {searchResults.length > 0 ? (
                         <ul>
                             {searchResults.map((result) => (
-                                <li key={result.id} style={styles.resultItem}>
-                                    <p>ID: {result.id}</p>
+                                <li key={result.id} className="resultItem">
+                                    <p className="title">ID: {result.id}</p>
                                     <p>Location: {result.location}</p>
                                     <p>Major: {result.major}</p>
                                     <p>Course: {result.course}</p>
                                     <p>Time: {result.time}</p>
                                     <p>Participants: {result.participants}</p>
-                                    <button onClick={() => handleJoinSession(result.id)} style={{ ...styles.button, marginLeft: '10px' }}>Join Session</button>
-                                    <button onClick={() => handleLeaveSession(result.id)} style={{ ...styles.button, marginLeft: '10px' }}>Leave Session</button>
+                                    <button onClick={() => handleJoinSession(result.id)} className="joinButton">Join Session</button>
+                                    <button onClick={() => handleLeaveSession(result.id)} className="leaveButton">Leave Session</button>
                                 </li>
                             ))}
                         </ul>
