@@ -61,6 +61,7 @@ function NavBar(props) {
                         <div style={styles.dropdownDiv}>
                             <ul style={styles.dropdownUl}>
                                 <li style={styles.dropdownLi}><Link to="/profile" style={styles.dropdownA}>Profile</Link></li>
+                                <li style={styles.dropdownLi}><Link to="/my-sessions" style={styles.dropdownA}>My Sessions</Link></li>
                                 <li style={styles.dropdownLi}><Link to="/login" style={styles.dropdownA} onClick={handleLogout}>Logout</Link></li>
                             </ul>
                         </div> 
