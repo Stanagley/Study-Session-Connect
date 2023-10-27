@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 function CreateSessionPage() {
     const [formData, setFormData] = useState({
         id: 0,
-        username: localStorage.getItem('username'),
         location: '',
         major: '',
         course: '',
-        time: ''
+        time: '',
+        username: localStorage.getItem('username')
     });
 
     const handleInputChange = (event) => {
@@ -35,19 +35,6 @@ function CreateSessionPage() {
     
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // Give form data an id
-        let new_maxId;
-        try {
-            const response = await fetch('http://localhost:9000/sessions/max-id'); // fetch max
-            const data = await response.json(); // record current max
-            new_maxId = data.maxId + 1; // create new max
-        } catch (error) {
-            console.error('Error fetching max ID:', error);
-            return;
-        }
-    
-        // Update the formData state using setFormData
-        setFormData(prevState => ({ ...prevState, id: new_maxId }));
     
         // Attempt to write to postgres
         insertPostgresSession();

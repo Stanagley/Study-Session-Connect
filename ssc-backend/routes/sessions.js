@@ -110,21 +110,6 @@ router.post('/leave-session', async (req, res) => {
 });
 
 
-router.get('/max-id', async (req, res) => {
-  try {
-      const sessions = await pool.query("SELECT MAX(id) AS max_id FROM sessions");
-      
-      // Extract the max_id from the first row
-      const maxId = sessions.rows[0].max_id;
-
-      res.json({ maxId });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Error with max-id query');
-  }
-});
-
-
 router.get('/', async (req, res) => {
     try {
         const sessions = await pool.query("SELECT * FROM sessions");
@@ -135,10 +120,13 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/get-my-sessions', async(req, res) => {
+router.post('/get-my-sessions', async(req, res) => {
     const{username} = req.body;
     try {
-        const my_sessions = await pool.query("SELECT * FROM sessions WHERE username = $1", [username]);
+        const my_sessions = await pool.query(
+            "SELECT * FROM sessions WHERE username = $1",
+            [username]
+        );
         res.json({my_sessions});
     } catch (err) {
         console.error(err.message);
@@ -146,21 +134,29 @@ router.get('/get-my-sessions', async(req, res) => {
     }
 });
 
+
 router.post('/', async (req, res) => {
-    // const response = await fetch('http://localhost:9000/sessions/max-id');
-    // const data = await response.json();
-    // let new_id = data.maxId + 1
     try {
-        const { id, location, major, course, time, username } = req.body;
+        // Fetch the maximum id from the sessions table
+        const result = await pool.query("SELECT MAX(id) AS max_id FROM sessions");
+        const maxId = (result.rows[0].max_id || 0) + 1;  // Increment the max id
+
+        // Extract other details from the request body
+        const { location, major, course, time, username } = req.body;
+
+        // Insert the new session using the incremented id
         const newSession = await pool.query(
             "INSERT INTO sessions (id, location, major, course, time, participants, username) VALUES ($1, $2, $3, $4, $5, 0, $6) RETURNING *",
-            [id, location, major, course, time, username]
+            [maxId, location, major, course, time, username]
         );
+        
         res.json(newSession.rows[0]);
+
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
     }
 });
+
 
 module.exports = router;
