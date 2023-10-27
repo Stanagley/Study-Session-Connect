@@ -68,9 +68,16 @@ function CreateSessionPage() {
             setLocationError(true);
             error = true;
         }
+        if (localStorage.getItem('username') == '') {
+            error = true;
+        }
+        
 
         if (error) {
             setMessage("Error: Missing Fields");
+            if (localStorage.getItem('username') == '') {
+                setMessage("Error: You must be logged in to create a session");
+            }
         } else {
             insertPostgresSession();
         }
