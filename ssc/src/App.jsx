@@ -5,6 +5,7 @@ import HomePage from './views/HomePage';
 import AboutPage from './views/AboutPage';
 import ContactPage from './views/ContactPage';
 import CreateSessionPage from './views/CreateSessionPage';
+import MySessionsPage from './views/MySessionsPage';
 import SearchPage from './views/SearchPage';
 import Profile from './views/Profile';
 import Onboarding from './views/Onboarding';
@@ -29,6 +30,7 @@ function App() {
                     <Route path="" element={<HomePage />} />
                     <Route path="contact" element={<ContactPage />} />
                     <Route path="create-session" element={<CreateSessionPage />} />
+                    <Route path="my-sessions" element={<MySessionsPage />} />
                     <Route path="onboarding" element={<Onboarding history={history} />} />
                     <Route path="profile" element={<Profile history={history} />} />
                 </Routes>
