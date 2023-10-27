@@ -135,15 +135,26 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/get-my-sessions', async(req, res) => {
+    const{username} = req.body;
+    try {
+        const my_sessions = await pool.query("SELECT * FROM sessions WHERE username = $1", [username]);
+        res.json({my_sessions});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Error getting sessions');
+    }
+});
+
 router.post('/', async (req, res) => {
     // const response = await fetch('http://localhost:9000/sessions/max-id');
     // const data = await response.json();
     // let new_id = data.maxId + 1
     try {
-        const { id, location, major, course, time } = req.body;
+        const { id, location, major, course, time, username } = req.body;
         const newSession = await pool.query(
-            "INSERT INTO sessions (id, location, major, course, time, participants) VALUES ($1, $2, $3, $4, $5, 0) RETURNING *",
-            [id, location, major, course, time]
+            "INSERT INTO sessions (id, location, major, course, time, participants, username) VALUES ($1, $2, $3, $4, $5, 0, $6) RETURNING *",
+            [id, location, major, course, time, username]
         );
         res.json(newSession.rows[0]);
     } catch (err) {

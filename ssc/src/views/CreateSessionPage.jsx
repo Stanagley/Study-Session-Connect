@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 function CreateSessionPage() {
     const [formData, setFormData] = useState({
         id: 0,
+        username: localStorage.getItem('username'),
         location: '',
         major: '',
         course: '',
