@@ -77,7 +77,7 @@ function MySessionsPage() {
                     ))}
                 </ul>
             ) : (
-                <p>No search results found.</p>
+                <p>No owned sessions found.</p>
             )}
         </div>
     );
