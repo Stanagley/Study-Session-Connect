@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 
-function SearchBar({ onSearch }) {
-    const [query, setQuery] = useState('');
-
-    const handleInputChange = (event) => {
-        setQuery(event.target.value);
-    };
-
+function SearchBar({ onSearch, query, onInputChange, querySuggestions, showSuggestions }) {
     const handleSearch = () => {
         if (query.trim() !== '') {
             onSearch(query);
@@ -19,16 +13,29 @@ function SearchBar({ onSearch }) {
         }
     };
 
+    const handleSuggestionClick = (suggestion) => {
+        onSearch(suggestion);
+    };
+
     return (
         <div className="search-bar">
             <input
                 type="text"
                 placeholder="Search..."
                 value={query}
-                onChange={handleInputChange}
+                onChange={onInputChange}
                 onKeyPress={handleKeyPress}
             />
             <button onClick={handleSearch}>Search</button>
+            {showSuggestions && querySuggestions.length > 0 && (
+                <ul className="suggestions">
+                    {querySuggestions.map((suggestion) => (
+                        <li key={suggestion} onClick={() => handleSuggestionClick(suggestion)}>
+                            {suggestion}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }
