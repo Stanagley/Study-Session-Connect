@@ -28,15 +28,20 @@ function MySessionsPage() {
         performSearch();
     }, []);
 
-    const handleDeleteSession = async() => {
+    const handleDeleteSession = async(sessionId) => {
         try {
-            //delete
-            //refresh
+            // Delete the session and its attendees
+            await fetch(`http://localhost:9000/sessions/delete-session/${sessionId}`, {
+                method: 'DELETE',
+            });
+    
+            // Refresh the list of sessions
             performSearch();
         } catch (err) {
             console.error(err.message);
         }
     };
+    
 
     const performSearch = async() => {
         const requestBody = {

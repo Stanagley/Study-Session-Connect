@@ -109,6 +109,23 @@ router.post('/leave-session', async (req, res) => {
     }
 });
 
+router.delete('/delete-session/:id', async (req, res) => {
+    const { id } = req.params;  // Extracting session ID from the URL parameters
+
+    try {
+        // First, delete all attendees associated with this session
+        await pool.query("DELETE FROM attendees WHERE session_id = $1", [id]);
+
+        // Next, delete the session itself
+        await pool.query("DELETE FROM sessions WHERE id = $1", [id]);
+
+        res.json({ message: 'Session and its attendees deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting the session and its attendees:', err);
+        res.status(500).send('Server error');
+    }
+});
+
 
 router.get('/', async (req, res) => {
     try {
