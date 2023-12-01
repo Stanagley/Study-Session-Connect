@@ -3,21 +3,22 @@ import SearchBar from '../components/SearchBar';
 import '../styles/SearchPage.css';
 
 function SearchPage() {
-    const [searchResults, setSearchResults] = useState([]); 
-    const [searchBy, setSearchBy] = useState('all'); 
-    const [query, setQuery] = useState(''); 
-    const [initialSearchPerformed, setInitialSearchPerformed] = useState(false);
-    const [showSuggestions, setShowSuggestions] = useState(false);
-    const [queryHistory, setQueryHistory] = useState([]);
-    const MAX_QUERY_HISTORY = 3;
+    // State variables using the useState hook
+    const [searchResults, setSearchResults] = useState([]); // Stores the results of the search
+    const [searchBy, setSearchBy] = useState('all'); // Stores the selected search criteria (all, major, location, course, time)
+    const [query, setQuery] = useState(''); // Stores the user's search query
+    const [initialSearchPerformed, setInitialSearchPerformed] = useState(false); // Tracks whether an initial search has been performed
+    const [showSuggestions, setShowSuggestions] = useState(false); // Controls the visibility of search suggestions
+    const [queryHistory, setQueryHistory] = useState([]); // Stores the user's search query history
+    const MAX_QUERY_HISTORY = 3; // Maximum number of query history entries
 
-
+    // useEffect hook to load previous queries from local storage when the component mounts
     useEffect(() => {
         const storedQueries = JSON.parse(localStorage.getItem('previousQueries')) || [];
         setQueryHistory(storedQueries);
     }, []);
 
-
+    // Function to handle joining a session
     const handleJoinSession = async (sessionId) => {
         console.log(`Joining session ${sessionId}`);
 
@@ -37,13 +38,12 @@ function SearchPage() {
 
             const data = await response.json();
             console.log(data.message);
-
         } catch (error) {
             console.error('Error joining the session:', error);
         }
     };
 
-
+    // Function to handle leaving a session
     const handleLeaveSession = async (sessionId) => {
         console.log(`Leaving session ${sessionId}`);
 
@@ -71,12 +71,12 @@ function SearchPage() {
         }
     };
 
-
+    // useEffect hook to perform the initial search when the component mounts
     useEffect(() => {
         performSearch(query, searchBy);
     }, []);
 
-    
+    // Function to perform the search and update searchResults state
     const performSearch = (searchQuery, searchCriteria) => {
         fetch(`http://localhost:9000/search?query=${searchQuery}&searchBy=${searchCriteria}`)
             .then((response) => response.json())
@@ -89,7 +89,7 @@ function SearchPage() {
             });
     };
 
-
+    // Function to handle changes in the selected search criteria
     const handleSearchCriteriaChange = (event) => {
         const newSearchBy = event.target.value;
         setSearchBy(newSearchBy);
@@ -97,10 +97,10 @@ function SearchPage() {
         performSearch(query, newSearchBy);
     };
 
-
+    // Function to handle user input for search
     const handleSearch = (newQuery) => {
         setQuery(newQuery);
-        setShowSuggestions(false); 
+        setShowSuggestions(false);
 
         setQueryHistory((prevHistory) => {
             const updatedHistory = [newQuery, ...prevHistory];
@@ -115,18 +115,18 @@ function SearchPage() {
         performSearch(newQuery, searchBy);
     };
 
-
+    // Function to handle input change in the search bar
     const handleInputChange = (event) => {
         const input = event.target.value;
         setQuery(input);
         setShowSuggestions(true);
     };
-    
 
+    // JSX structure for rendering the SearchPage component
     return (
         <div className="container">
             <h2 className="title">Search Page</h2>
-            <p className="description">Select search criteria:</p>
+            {/* Radio buttons for selecting search criteria */}
             <div>
                 <label>
                     <input type="radio" value="all" checked={searchBy === 'all'} onChange={handleSearchCriteriaChange} />
@@ -150,6 +150,7 @@ function SearchPage() {
                 </label>
             </div>
             <p className="description">Enter your search query below:</p>
+            {/* SearchBar component for user input */}
             <SearchBar
                 onSearch={handleSearch}
                 query={query}
@@ -158,10 +159,13 @@ function SearchPage() {
                 showSuggestions={showSuggestions}
             />
 
+            {/* Display search results if initial search has been performed */}
             {initialSearchPerformed && (
                 <div className="searchResults">
+                    {/* Display search results or a message if no results found */}
                     {searchResults.length > 0 ? (
                         <ul>
+                            {/* Mapping through search results and displaying each item */}
                             {searchResults.map((result) => (
                                 <li key={result.id} className="resultItem">
                                     <p className="title">ID: {result.id}</p>
@@ -184,4 +188,5 @@ function SearchPage() {
     );
 }
 
+// Exporting the SearchPage component as the default export
 export default SearchPage;
