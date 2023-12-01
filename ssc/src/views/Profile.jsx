@@ -1,8 +1,19 @@
 import { useEffect, useState } from 'react';
 import blank_profile from '../assets/blank_profile.png';
 
+/**
+ * 
+ * @param {*} props is an argument that gives us access to the user's history so that we can push the user
+ * to the login page.
+ * @returns The page for the user to view their profile. This contains information such as a user's inputted
+ * grad year or major.
+ * 
+ * This code creates the page for users to look at their profile. Their profile contains their first name, last name
+ * major, and grad year. They are able to view all of this information as long as the user is logged in and it is all saved
+ * in the database.
+ */
 function Profile(props) {
-
+    // These styles allow us to make the page look better
     const styles = {
         container: { padding: '20px', maxWidth: '400px', margin: 'auto' },
         input: { width: '100%', padding: '10px', margin: '10px 0' },
@@ -11,12 +22,16 @@ function Profile(props) {
         editing: { display: 'flex', flexDirection: 'column'},
     };
 
+    // These are the useState hooks that we use to record the first name, last name, major, and grad year.
+    // These would be important for editing a user's information
     const [editMode, setEditMode] = useState(false);
     const [fname, setFName] = useState(localStorage.getItem('fname'));
     const [lname, setLName] = useState(localStorage.getItem('lname'));
     const [major, setMajor] = useState(localStorage.getItem('major'));
     const [gradYear, setGradYear] = useState(localStorage.getItem('gradYear'));
 
+    // This useEffect is for checking if a user is logged in or not. If the user is not logged in then we send them
+    // to the login page.
     useEffect(() => {
         if (localStorage.getItem('username') == '') {
             props.history.push('/login');
@@ -24,6 +39,7 @@ function Profile(props) {
         }
     }, []);
 
+    // This function handles whether or not a user is editing their profile.
     function handleEdit() {
         if (editMode) {
             // saving
