@@ -1,3 +1,4 @@
+// This function allows us to connect to the database
 const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
@@ -7,6 +8,7 @@ const pool = new Pool({
   port: 5432,
 });
 
+// This function allows us to get all the users from the database
 const getUsers = async (request, response) => {
   const users = await pool.query('SELECT * FROM users', (error, results) => {
     if (error) {
@@ -16,6 +18,7 @@ const getUsers = async (request, response) => {
   })
 }
 
+// This function allows us to validate a user's login information
 const validateUser = async (request, response) => {
   let submittedUsername = request.body.username;
   let query = 'SELECT username, password FROM users WHERE username=\'' + submittedUsername + '\''
@@ -33,6 +36,7 @@ const validateUser = async (request, response) => {
   })
 }
 
+// This API allows a user to sign up with a given username and password
 const signupUser = async (request, response) => {
   let submittedUsername = request.body.username;
   let submittedPassword = request.body.password;
@@ -57,6 +61,7 @@ const signupUser = async (request, response) => {
   })
 }
 
+// This API gets the user's info (such as name, major, and grad year)
 const getUserInfo = async (request, response) => {
   let submittedUsername = request.body.username;
   let query = 'SELECT fname, lname, major, gradyear FROM profiles WHERE username=\'' + submittedUsername + '\''
@@ -69,6 +74,7 @@ const getUserInfo = async (request, response) => {
   })
 }
 
+// This API sets the user's info (such as name, major, and grad year)
 const setUserInfo = async (request, response) => {
   let submittedUsername = request.body.username;
   let submittedFirstName = request.body.firstName;
